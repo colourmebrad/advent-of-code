@@ -19,45 +19,12 @@ else
 
 function partTwo($size, $value)
 {
-	$grid = buildMemoryGridPartTwo($size);
-	
-	// get the dimensions
-	$dim = sqrt($size);
-	$middleIndex = floor($dim / 2);
-	
-	$biggest	= getValue($grid, $value);
-	
-	if ($biggest != null)
-	{
-		return $biggest;
-	}
-	else
-	{
-		return "grid too small";
-	}
-}
-
-function getValue($grid, $value)
-{
-	$size = count($grid);
-
-	for ($i = 0; $i < $size; $i++)
-	{
-		for ($j = 0; $j < $size; $j++)
-		{
-			if ($grid[$i][$j] >= $value)
-			{
-				return $grid[$i][$j];
-			}
-		}
-	}
-	
-	return null;
+	echo buildMemoryGridPartTwo($size, $value);
 }
 
 // I don't feel like trying to be clever, I'll just build it to start
 // this falls to fucking pieces if it doesn't $size doesn't have a sqrt() if an odd number. not sorry
-function buildMemoryGridPartTwo($size)
+function buildMemoryGridPartTwo($size, $targetValue)
 {
 	$grid = array();
 	
@@ -74,7 +41,7 @@ function buildMemoryGridPartTwo($size)
 		$grid[] = array();
 		for ($j = 0; $j < $dim; $j++)
 		{
-			$grid[$i][] = "*";
+			$grid[$i][] = 0;
 		}
 	}
 	
@@ -87,13 +54,19 @@ function buildMemoryGridPartTwo($size)
 	$currentIndex	= 1;
 	$currentRow		= $middleIndex;
 	$currentCol		= $middleIndex+1;
+	$dir			= "right";
 	
-	$dir		= "right";
+	$valueFound		= null;
 	
 	// This gets the job done ¯\_(ツ)_/¯
 	while (true)
 	{
 		$currentVal = partTwoGetCellValue($grid, array($currentRow, $currentCol));
+		
+		if ($valueFound == null && $currentVal >= $targetValue)
+		{
+			$valueFound = $currentVal;
+		}
 		
 		$grid[$currentRow][$currentCol] = $currentVal;
 		$currentIndex++;
@@ -155,12 +128,61 @@ function buildMemoryGridPartTwo($size)
 	
 	debugRenderGrid($grid);
 	
-	return $grid;
+	return $valueFound;
 }
 
 function partTwoGetCellValue($grid, $coords)
 {
-	return 1;
+	$size = count($grid);
+	
+	$cols = array();
+	$rows = array();
+	
+	if ($coords[0] == 0)
+	{
+		$rows[] = $coords[0];
+		$rows[] = $coords[0] + 1;
+	}
+	else if ($coords[0] == $size-1)
+	{
+		$rows[] = $coords[0] - 1;
+		$rows[] = $coords[0];
+	}
+	else
+	{
+		$rows[] = $coords[0] - 1;
+		$rows[] = $coords[0];
+		$rows[] = $coords[0] + 1;
+	}
+	
+	if ($coords[1] == 0)
+	{
+		$cols[] = $coords[1];
+		$cols[] = $coords[1] + 1;
+	}
+	else if ($coords[1] == $size-1)
+	{
+		$cols[] = $coords[1] - 1;
+		$cols[] = $coords[1];
+	}
+	else
+	{
+		$cols[] = $coords[1] - 1;
+		$cols[] = $coords[1];
+		$cols[] = $coords[1] + 1;
+	}
+	
+	$val = 0;
+	
+	foreach ($rows as $row)
+	{
+		foreach ($cols as $col)
+		{
+			$val += $grid[$row][$col];
+		}
+	}
+	
+	return $val;
 }
 
 
