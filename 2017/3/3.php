@@ -19,31 +19,21 @@ else
 
 function partTwo($size, $value)
 {
-	$grid = buildMemoryGrid($size);
+	$grid = buildMemoryGridPartTwo($size);
 	
 	// get the dimensions
 	$dim = sqrt($size);
 	$middleIndex = floor($dim / 2);
 	
-	$one	= array($middleIndex, $middleIndex);
-	
-	echo "<pre>";
-	print_r($one);
-	echo "</pre>";
-	
 	$biggest	= getValue($grid, $value);
-	
-	echo "<pre>";
-	print_r($biggest);
-	echo "</pre>";
 	
 	if ($biggest != null)
 	{
-		echo $biggest;
+		return $biggest;
 	}
 	else
 	{
-		echo "grid too small";
+		return "grid too small";
 	}
 }
 
@@ -64,6 +54,117 @@ function getValue($grid, $value)
 	
 	return null;
 }
+
+// I don't feel like trying to be clever, I'll just build it to start
+// this falls to fucking pieces if it doesn't $size doesn't have a sqrt() if an odd number. not sorry
+function buildMemoryGridPartTwo($size)
+{
+	$grid = array();
+	
+	echo "size: $size<br />";
+	
+	// get the dimensions
+	$dim = sqrt($size);
+	
+	echo "dimensions: {$dim}x$dim<br />";
+	
+	// build the grid with placeholder values, I guess?
+	for ($i = 0; $i < $dim; $i++)
+	{
+		$grid[] = array();
+		for ($j = 0; $j < $dim; $j++)
+		{
+			$grid[$i][] = "*";
+		}
+	}
+	
+	$middleIndex = floor($dim / 2);
+	
+	echo "1 is at [$middleIndex][$middleIndex]<br />";
+	
+	$grid[$middleIndex][$middleIndex] = 1;
+	
+	$currentIndex	= 1;
+	$currentRow		= $middleIndex;
+	$currentCol		= $middleIndex+1;
+	
+	$dir		= "right";
+	
+	// This gets the job done ¯\_(ツ)_/¯
+	while (true)
+	{
+		$currentVal = partTwoGetCellValue($grid, array($currentRow, $currentCol));
+		
+		$grid[$currentRow][$currentCol] = $currentVal;
+		$currentIndex++;
+
+		if ($dir == "right")
+		{
+			if ($grid[$currentRow-1][$currentCol] == 0)
+			{
+				$dir = "up";
+				$currentRow--;
+			}
+			else
+			{
+				$currentCol++;
+			}
+		}
+		else if ($dir == "up")
+		{
+			if ($grid[$currentRow][$currentCol-1] == 0)
+			{
+				$dir = "left";
+				$currentCol--;
+			}
+			else
+			{
+				$currentRow--;
+			}
+		}
+		else if ($dir == "left")
+		{
+			if ($grid[$currentRow+1][$currentCol] == 0)
+			{
+				$dir = "down";
+				$currentRow++;
+			}
+			else
+			{
+				$currentCol--;
+			}
+		}
+		else if ($dir == "down")
+		{
+			if ($grid[$currentRow][$currentCol+1] == 0)
+			{
+				$dir = "right";
+				$currentCol++;
+			}
+			else
+			{
+				$currentRow++;
+			}
+		}
+		
+		if ($currentIndex == $size)
+		{
+			break;
+		}
+	}
+	
+	debugRenderGrid($grid);
+	
+	return $grid;
+}
+
+function partTwoGetCellValue($grid, $coords)
+{
+	return 1;
+}
+
+
+
 
 function partOne($size, $value)
 {
