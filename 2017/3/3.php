@@ -17,9 +17,52 @@ else
 	echo sqrt($_GET["size"]);
 }
 
-function partTwo($input)
+function partTwo($size, $value)
 {
-	return 0;
+	$grid = buildMemoryGrid($size);
+	
+	// get the dimensions
+	$dim = sqrt($size);
+	$middleIndex = floor($dim / 2);
+	
+	$one	= array($middleIndex, $middleIndex);
+	
+	echo "<pre>";
+	print_r($one);
+	echo "</pre>";
+	
+	$biggest	= getValue($grid, $value);
+	
+	echo "<pre>";
+	print_r($biggest);
+	echo "</pre>";
+	
+	if ($biggest != null)
+	{
+		echo $biggest;
+	}
+	else
+	{
+		echo "grid too small";
+	}
+}
+
+function getValue($grid, $value)
+{
+	$size = count($grid);
+
+	for ($i = 0; $i < $size; $i++)
+	{
+		for ($j = 0; $j < $size; $j++)
+		{
+			if ($grid[$i][$j] >= $value)
+			{
+				return $grid[$i][$j];
+			}
+		}
+	}
+	
+	return null;
 }
 
 function partOne($size, $value)
