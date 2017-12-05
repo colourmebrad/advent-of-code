@@ -41,11 +41,26 @@ function partTwoValidPassphrase($pass)
 		return false;
 	}
 	
+	echo "<pre>";
+	//print_r($pass);
+	echo "</pre>";
+	
+	for ($i = 0; $i < count($pass); $i++)
+	{
+		$asArray = str_split($pass[$i]);
+		sort($asArray);
+		$pass[$i] = implode("", $asArray);
+	}
+	
+	echo "<pre>";
+	//print_r($pass);
+	echo "</pre>";
+	
 	for ($i = 0; $i < count($pass)-1; $i++)
 	{
 		for ($j = $i+1; $j < count($pass); $j++)
 		{
-			if (isAnagram($pass[$i], $pass[$j]))
+			if ($pass[$i] == $pass[$j])
 			{
 				return true;
 			}
