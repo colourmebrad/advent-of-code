@@ -41,6 +41,8 @@ function partTwoValidPassphrase($pass)
 		return false;
 	}
 	
+	//echo "======as given=======<br />";
+	
 	echo "<pre>";
 	//print_r($pass);
 	echo "</pre>";
@@ -52,6 +54,8 @@ function partTwoValidPassphrase($pass)
 		$pass[$i] = implode("", $asArray);
 	}
 	
+	//echo "======sorted=======<br />";
+	
 	echo "<pre>";
 	//print_r($pass);
 	echo "</pre>";
@@ -62,12 +66,12 @@ function partTwoValidPassphrase($pass)
 		{
 			if ($pass[$i] == $pass[$j])
 			{
-				return true;
+				return false;
 			}
 		}
 	}
 	
-	return false;
+	return true;
 }
 
 function isAnagram($a, $b)
