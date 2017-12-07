@@ -15,12 +15,39 @@ else if ($_GET["part"] == 2)
 
 function partTwo($input)
 {
-	$raw		= getInputFile($input);
-	$data		= parseFile($raw);
+	$raw			= getInputFile($input);
+	$instructions	= parseFile($raw);
 	
-	echo "<pre>";
-	print_r($data);
-	echo "</pre>";
+	$index		= 0;
+	$steps		= 1;
+	while (true)
+	{
+		$nextIndex = $index + $instructions[$index];
+		
+		if ($nextIndex >= count($instructions))
+		{
+			return $steps;
+		}
+		
+		if ($nextIndex < 0)
+		{
+			echo "index of $nextIndex?";
+			break;
+		}
+		
+		if ($instructions[$index] >= 3)
+		{
+			$instructions[$index]--;
+		}
+		else
+		{
+			$instructions[$index]++;
+		}
+		
+		$index = $nextIndex;
+		
+		$steps++;
+	}
 	
 	return 0;
 }
