@@ -1,8 +1,8 @@
 <?
 
-// http://adventofcode.com/2017/day/5
+// http://adventofcode.com/2017/day/6
 
-// input: http://adventofcode.com/2017/day/5/input
+// input: http://adventofcode.com/2017/day/6/input
 
 if ($_GET["part"] == 1)
 {
@@ -24,11 +24,12 @@ function partTwo($input)
 function partOne($input)
 {
 	$raw	= getInputFile($input);
+	
 	$blocks	= parseFile($raw);
 	
 	$blockCount	= count($blocks);
 	
-	$configs	= array($input);	// this first config is the one given in the file
+	$configs	= array($raw);	// this first config is the one given in the file
 	
 	$cycles		= 0;
 	
@@ -49,27 +50,29 @@ function partOne($input)
 		
 		$redCount = $largest;
 		
+		$blocks[$largestIndex] = 0;
+		
+		$redIndex = $largestIndex;
+		
 		while ($redCount > 0)
 		{
-			// do the redistribution here
+			$redIndex = $redIndex == $blockCount - 1 ? 0 : $redIndex + 1;
+
+			$blocks[$redIndex]++;
+			
+			$redCount--;
 		}
 		
 		$thisConfig = implode("	", $blocks);
 		
-		if (array_contains($thisConfig, $configs))
+		if (in_array($thisConfig, $configs))
 		{
-			//found something we've seen before
-			return $cycles;
+			$configs[] = $thisConfig;	// just so I can see it in the print_r
+			break;
 		}
 		
-		// check if we've seen it before and return
-		
-		// else add implode() to configs
+		$configs[] = $thisConfig;
 	}
-	
-	echo "<pre>";
-	print_r($blocks);
-	echo "</pre>";
 	
 	echo "<pre>";
 	print_r($configs);
