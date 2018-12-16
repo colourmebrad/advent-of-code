@@ -1,72 +1,67 @@
 <?
 
-$input = "abcdef
-bababc
-abbcde
-abcccd
-aabcdd
-abcdee
-ababab";
+$input = "abcde
+fghij
+klmno
+pqrst
+fguij
+axcye
+wvxyz";
 
-echo checksum(getInput());
+$common = getCommonIDLetters(getInput());
 
-
-function checksum($input)
+if ($common == null)
 {
-	$vals = explode(PHP_EOL, $input);
+	echo "We fucked";
+}
+else
+{
+	echo $common;
+}
+
+function getCommonIDLetters($input)
+{
+	$ids = explode(PHP_EOL, $input);
 	
-	$twos	= 0;
-	$threes	= 0;
-	
-	foreach ($vals as $val)
+	for ($i = 0; $i < count($ids); $i++)
 	{
-		$charMap = array();
-		
-		for ($i = 0; $i < strlen($val); $i++)
+		for ($j = $i+1; $j < count($ids); $j++)
 		{
-			$char = $val[$i];
-			
-			if (isset($charMap[$char]))
+			$common = getCommon($ids[$i], $ids[$j]);
+			if ($common != null)
 			{
-				$charMap[$char]++;
+				return $common;
 			}
-			else
-			{
-				$charMap[$char] = 1;
-			}
-		}
-		
-		$two = false;
-		$three = false;
-		
-		foreach ($charMap as $count)
-		{
-			if ($count == 2)
-			{
-				$two = true;
-			}
-			else if ($count == 3)
-			{
-				$three = true;
-			}
-		}
-		
-		//echo "<h3>$val: " . ($two?"two":"") . " : " . ($three?"three":"") . "</h3>";
-		
-		if ($two)
-		{
-			$twos++;
-		}
-		
-		if ($three)
-		{
-			$threes++;
 		}
 	}
 	
-	return $twos * $threes;
+	return null;
 }
+
+function getCommon($id1, $id2)
+{
+	$common = "";
+	$diffCount = 0;
 	
+	for ($i = 0; $i < strlen($id1); $i++)
+	{
+		if ($id1[$i] == $id2[$i])
+		{
+			$common .= $id1[$i];
+		}
+		else
+		{
+			$diffCount++;
+			if ($diffCount > 1)
+			{
+				return null;
+			}
+		}
+	}
+	
+	return $common;
+}
+
 function getInput()
 {
 	return "uqyoeiznvmzrstpkgnsacjxwld
@@ -320,5 +315,4 @@ uqeoeizfvmbrstpkgnhtnjxwld
 uqyouizfvmnrstpkgxhacjxwld
 ugyoeizfvmbrsupygnhacjxwld";
 }
-
 ?>
